@@ -1,12 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { createBrowserHistory } from 'history';
+import { Router } from 'react-router';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'mobx-react';
+import { getLanguage } from '@/locales/language';
+import stores from '@/store/';
+import i18n from '@/locales/i18n';
+import Routers from '@/routers';
 import * as serviceWorker from './serviceWorker';
+import 'antd/dist/antd.css';
+
+export const history = createBrowserHistory();
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <I18nextProvider i18n={i18n}>
+      <ConfigProvider locale={getLanguage()}>
+        <Provider {...stores}>
+          <BrowserRouter>
+            <Router history={history}>
+              <Switch>
+                <Route path="/" component={Routers} />
+              </Switch>
+            </Router>
+          </BrowserRouter>
+        </Provider>
+      </ConfigProvider>
+    </I18nextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
